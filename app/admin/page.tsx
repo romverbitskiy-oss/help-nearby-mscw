@@ -1,0 +1,25 @@
+import type { Metadata } from "next";
+import { AdminPage } from "@/components/pages/AdminPage";
+import { isAdminAuthenticated, isAdminConfigured } from "@/lib/adminAuth";
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
+
+export const runtime = "nodejs";
+
+export const metadata: Metadata = {
+  title: "Admin — Help Nearby",
+  robots: { index: false, follow: false },
+};
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminRoutePage() {
+  const authenticated = await isAdminAuthenticated();
+
+  return (
+    <AdminPage
+      initialAuthenticated={authenticated}
+      initialConfigured={isAdminConfigured()}
+      initialCanVerify={Boolean(getSupabaseAdmin())}
+    />
+  );
+}
